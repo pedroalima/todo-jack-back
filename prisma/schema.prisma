@@ -21,3 +21,11 @@ model User {
 
   name String
 }
+
+model Todo {
+  id          String      @id
+  title       String
+  description String
+  dueDate     String
+  status      String
+}
