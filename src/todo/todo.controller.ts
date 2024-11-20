@@ -7,10 +7,13 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { TodoService } from './todo.service';
 
+@ApiTags('Todo')
+@ApiBearerAuth()
 @Controller('todo')
 export class TodoController {
   constructor(private readonly todoService: TodoService) {}
