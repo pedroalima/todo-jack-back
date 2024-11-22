@@ -12,7 +12,7 @@ import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { TodoService } from './todo.service';
 
-@ApiTags('Todo')
+@ApiTags('todo')
 @ApiBearerAuth()
 @Controller('todo')
 export class TodoController {
