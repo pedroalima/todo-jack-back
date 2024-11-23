@@ -72,12 +72,13 @@ Esta API tem como objetivo fornecer funcionalidades essenciais para a gestão de
 
 </br>
 
-<!-- ## Meu aprendizado
+## Meu aprendizado
 
-Ao me deparar com o banco de dados MongoDB pela primeira vez, aprendi sobre o aspecto de modelagem de objetos elaborado pelo Mongoose.
+O processo de desenvolvimento da aplicação, esteve mais focado na implementação da autenticação.
 
-Após estabelecer a conexão com o banco de dados, é necessário criar um esquema para cada objeto:
+A autenticação foi uma das partes mais complexas do projeto, envolvendo o uso do JSON Web Token (JWT) para gerenciar o fluxo de login, geração e validação de tokens, além do controle de sessões. Também foi essencial garantir a segurança dos dados sensíveis, utilizando algoritmos de criptografia e técnicas de hashing para armazenar senhas de forma segura.
 
+<!--
 ```tsx
 import mongoose from "mongoose";
 
