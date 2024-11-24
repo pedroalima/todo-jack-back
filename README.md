@@ -76,63 +76,58 @@ Esta API tem como objetivo fornecer funcionalidades essenciais para a gestão de
 
 O processo de desenvolvimento da aplicação, esteve mais focado na implementação da autenticação.
 
-A autenticação foi uma das partes mais complexas do projeto, envolvendo o uso do JSON Web Token (JWT) para gerenciar o fluxo de login, geração e validação de tokens, além do controle de sessões. Também foi essencial garantir a segurança dos dados sensíveis, utilizando algoritmos de criptografia e técnicas de hashing para armazenar senhas de forma segura.
-
-<!--
-```tsx
-import mongoose from "mongoose";
-
-const HomeSchema = new mongoose.Schema({
-    mainText: String,
-    description: String,
-},
-{ timestamps: true });
-
-const Home = mongoose.models.Home || mongoose.model("Home", HomeSchema);
-
-export default Home;
-```
-
-Ao definir cada esquema, é necessário criar e exportar o modelo correspondente. Dessa forma, tudo está pronto para ser aplicado em cada rota.
+A autenticação foi uma das partes mais complexas do projeto, envolvendo o uso do JSON Web Token (JWT) para gerenciar o fluxo de login, geração e validação de tokens, além do controle de sessões.
 
 ```tsx
-import connectToDatabase from "@/database";
-import Home from "@/models/Home";
-import { NextRequest, NextResponse } from "next/server";
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
+import { UserModule } from '../user/user.module';
+import { AuthController } from './auth.controller';
+import { AuthService } from './auth.service';
+import { LoginValidationMiddleware } from './middlewares/login-validation.middleware';
+import { JwtStrategy } from './strategies/jwt.strategy';
+import { LocalStrategy } from './strategies/local.strategy';
 
-export const dynamic = "force-dynamic";
-
-export async function POST(req: NextRequest) {
-    try {
-        await connectToDatabase();
-        const extractData = await req.json();
-        const saveData = await Home.create(extractData);
-
-        if (saveData) {
-            return NextResponse.json({
-                success: true,
-                message: "Data saved successfully",
-            });
-        } else {
-            return NextResponse.json({
-                success: false,
-                message: "Something goes wrong! Please try again",
-            });
-        }
-    } catch (error) {
-        console.log(error);
-
-        return NextResponse.json({
-            success: false,
-            message: "Something goes wrong! Please try again",
-        });
-    }
+@Module({
+  imports: [
+    UserModule,
+    PassportModule,
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '30d' },
+    }),
+  ],
+  controllers: [AuthController],
+  providers: [AuthService, LocalStrategy, JwtStrategy],
+})
+export class AuthModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoginValidationMiddleware).forRoutes('login');
+  }
 }
 ```
 
-Veja mais detalhes na documentação oficial [aqui](https://mongoosejs.com/docs/guide.html)
+Aqui podemos destacar os responsáveis pelo processo de autenticação os "imports", "controllers" e "providers" no Auth.module:
+* Imports
+    - UserModule: Onde contém a lógica para acessar e gerenciar os dados do usuário.
+    - PassportModule: Integra o framework de autenticação Passport.js, que simplifica a autenticação em aplicações Node.js.
+    - JwtModule: Configura o uso de JWT (JSON Web Token), permitindo que tokens sejam gerados e verificados. O JwtModule.register define o segredo (secret) para assinar os tokens e a validade padrão do token (expiresIn: '30d'), que é de 30 dias (exemplo apenas para teste).
+
+* Controllers
+    - AuthController: Define a rota de login
+
+* Providers
+    - AuthService: Contém a lógica central de autenticação, como verificar credenciais e gerar tokens JWT.
+    - LocalStrategy: Lida com autenticação por email e senha do usuário.
+    - JwtStrategy: Verifica se o token JWT enviado pelo cliente é válido e autoriza o acesso às rotas protegidas.
+
+Também foi essencial garantir a segurança dos dados sensíveis, utilizando algoritmos de criptografia e técnicas de hashing para armazenar senhas de forma segura.
+
+Veja mais detalhes dessa implementação neste artigo [aqui](https://fabricadesinapse.gitbook.io/sinapse-book/nestjs/autenticacao-sistema-de-login-com-token-jwt)
 </br>
 
+<!--
 ## Rodando o projeto
 
 ![#](./public/desktop.gif)
