@@ -124,46 +124,53 @@ Aqui podemos destacar os responsáveis pelo processo de autenticação os "impor
 
 Também foi essencial garantir a segurança dos dados sensíveis, utilizando algoritmos de criptografia e técnicas de hashing para armazenar senhas de forma segura.
 
-Veja mais detalhes dessa implementação neste artigo [aqui](https://fabricadesinapse.gitbook.io/sinapse-book/nestjs/autenticacao-sistema-de-login-com-token-jwt)
+Veja mais detalhes da implementação neste artigo [aqui](https://fabricadesinapse.gitbook.io/sinapse-book/nestjs/autenticacao-sistema-de-login-com-token-jwt)
 </br>
 
-<!--
+
 ## Rodando o projeto
 
-![#](./public/desktop.gif)
+<!-- ![#](./public/desktop.gif) -->
 
-### Acesse a aplicação via web [aqui!](https://portifolio-pedroalima.vercel.app/)
+### Pré-requisitos:
+Certifique-se de que o Docker está instalado em sua máquina antes de prosseguir.
 
-#### Ou instale na sua máquina. Para conferir a versão final, é só realizar os seguintes passos:
-
-### 1 - Clonando o Projeto:
-Navegue até o diretório onde deseja clonar o projeto. Abra o terminal com o GitBash e execute o comando:
-
-```bash
-git clone URL_DO_REPOSITORIO
-```
-Substitua URL_DO_REPOSITORIO pela URL do repositório deste projeto.
-
-#### 2 - Instalando Dependências:
-Navegue até a pasta clonada do projeto e execute o comando no terminal:
+### 1 - Baixando as imagens:
+O projeto utiliza duas imagens: uma para o backend e outra para o frontend. Para começar, abra qualquer terminal (cmd ou PowerShell) e execute os seguintes comandos, um de cada vez:
 
 ```bash
-npm install
+docker pull pedroalima/todo-jack-back:latest-v2
 ```
-ou
 ```bash
-yarn install
+docker pull pedroalima/todo-jack-front:latest-v2
 ```
+Nota: Aguarde o download de cada imagem antes de prosseguir.
 
-#### 3 - Executando o Projeto:
-Ainda na pasta do projeto, execute o comando no terminal:
+### 2 - Executando as imagens:
+Ainda no terminal, siga as instruções abaixo para rodar o backend e o frontend.
+
+Para iniciar o backend na porta 3000, execute:
 
 ```bash
-npm run dev
+docker run -d -p 3000:3000 pedroalima/todo-jack-back:latest-v2
 ```
-Isso iniciará o servidor de desenvolvimento Next.
+Para iniciar o frontend na porta 5000, execute:
+```bash
+docker run -d -p 5000:5000 pedroalima/todo-jack-front:latest-v2
+```
 
-</br> -->
+### 3 - Testando o projeto:
+Com tudo configurado, abra o navegador de sua preferência e acesse o endereço:
+
+```bash
+http://localhost:5000
+```
+Agora você pode explorar e testar o projeto à vontade!
+
+Se desejar verificar a API acesse o endereço:
+```bash
+http://localhost:3000/api
+```
 
 ## Autor
 
